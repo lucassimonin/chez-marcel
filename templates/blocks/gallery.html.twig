@@ -1,0 +1,28 @@
+<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %} class="scroll-mt-24 py-20 sm:py-28">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="reveal mb-12 max-w-xl">
+            {% if data.kicker %}
+                <p class="font-label text-xs uppercase tracking-[0.28em] text-sage">{{ data.kicker }}</p>
+            {% endif %}
+            {% if data.title %}
+                <h2 class="mt-3 font-display text-3xl font-medium italic text-forest sm:text-4xl">{{ data.title }}</h2>
+            {% endif %}
+        </div>
+
+        {% set placeholders = ['ph-warm', 'ph-salle', 'ph-plat', 'ph-mer', 'ph-glace'] %}
+        <div class="reveal grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[170px] sm:grid-cols-4">
+            {% for img in data.images|default('')|split_pairs %}
+                <figure class="group relative overflow-hidden rounded-journal {{ loop.first ? 'col-span-2 row-span-2' }}">
+                    {% if img.left %}
+                        <img src="{{ img.left }}" alt="{{ img.right }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy">
+                    {% else %}
+                        <div class="{{ placeholders[loop.index0 % placeholders|length] }} h-full w-full"></div>
+                    {% endif %}
+                    {% if img.right %}
+                        <figcaption class="absolute bottom-3 left-3 font-label text-[10px] uppercase tracking-[0.08em] text-white drop-shadow">{{ img.right }}</figcaption>
+                    {% endif %}
+                </figure>
+            {% endfor %}
+        </div>
+    </div>
+</section>

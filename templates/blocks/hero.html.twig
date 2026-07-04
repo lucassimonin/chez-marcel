@@ -1,0 +1,56 @@
+<section class="relative min-h-screen overflow-hidden">
+    {% if data.image %}
+        <div class="absolute inset-0 -z-10">
+            <img src="{{ data.image }}" alt="{{ data.image_alt }}" class="h-full w-full object-cover" loading="eager">
+            <div class="hero-overlay absolute inset-0"></div>
+        </div>
+    {% else %}
+        <div class="hero-marcel absolute inset-0 -z-10"></div>
+    {% endif %}
+
+    <div class="relative mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center px-4 py-28 text-center sm:px-6">
+        <div class="reveal">
+            {% if data.kicker %}
+                <p class="font-label text-xs uppercase tracking-[0.28em] text-sage">{{ data.kicker }}</p>
+            {% endif %}
+            {% if data.title %}
+                <h1 class="mt-4 font-display text-5xl font-medium italic leading-none text-white sm:text-7xl">{{ data.title }}</h1>
+            {% endif %}
+            {% if data.subtitle %}
+                <p class="mt-3 font-label text-sm uppercase tracking-[0.22em] text-sand/90">{{ data.subtitle }}</p>
+            {% endif %}
+            {% if data.tagline %}
+                <p class="mt-5 font-display text-2xl italic text-sand/95 sm:text-3xl">{{ data.tagline }}</p>
+            {% endif %}
+            {% if data.text %}
+                <p class="mx-auto mt-6 max-w-md text-base leading-relaxed text-sand/85">{{ data.text }}</p>
+            {% endif %}
+
+            {% if data.primary_label or data.secondary_label %}
+                <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+                    {% if data.primary_label %}
+                        <a href="{{ data.primary_link ?: '#' }}"
+                           class="inline-flex items-center justify-center gap-2 rounded-journal bg-argile px-8 py-3.5 font-label text-xs uppercase tracking-[0.14em] text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-earth">
+                            {{ data.primary_label }}
+                        </a>
+                    {% endif %}
+                    {% if data.secondary_label %}
+                        <a href="{{ data.secondary_link ?: '#' }}"
+                           class="inline-flex items-center justify-center gap-2 rounded-journal border border-sand/50 px-8 py-3.5 font-label text-xs uppercase tracking-[0.14em] text-sand transition hover:bg-sand/10">
+                            {{ data.secondary_label }}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% set ribbon = data.ribbon|default('')|split_pairs %}
+            {% if ribbon|length > 0 %}
+                <div class="mt-16 flex flex-wrap justify-center gap-x-12 gap-y-3 border-t border-sand/20 pt-6 font-label text-[11px] uppercase tracking-[0.14em] text-sand/70">
+                    {% for item in ribbon %}
+                        <span>{{ item.left }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* =========================================================
+   Thème du site — Chez Marcel (Palavas-les-Flots)
+   Palette extraite de la maquette. Les noms de tokens sont
+   conservés (sand/forest/sage/ink/earth/line) pour reskiner
+   automatiquement tous les templates du kit.
+   ========================================================= */
+@theme {
+    --color-sand: #F1E4D0;   /* sable — fond clair du site */
+    --color-forest: #221F1C; /* encre — sections foncées, titres, texte */
+    --color-sage: #B08D4F;   /* laiton — surtitres / icônes (accent doré) */
+    --color-ink: #221F1C;    /* encre — texte courant */
+    --color-earth: #9B5539;  /* argile foncé — survols de boutons */
+    --color-line: #E2D3B6;   /* filet beige sur fond sable */
+
+    /* Accents propres à Chez Marcel */
+    --color-argile: #BE6E4D;      /* terracotta — boutons principaux */
+    --color-argile-dark: #9B5539;
+    --color-paper: #FAF3E6;       /* surface claire (atouts, galerie) */
+    --color-camargue: #2B4A4E;    /* bleu-vert profond */
+    --color-sable2: #E9D6B8;
+
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-label: "Oswald", ui-sans-serif, sans-serif; /* surtitres / boutons */
+    --font-admin: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+    --radius-journal: 0.15rem;
+    --shadow-soft: 0 16px 48px rgba(34, 31, 28, 0.18);
+}
+
+/* ---- Comportements globaux front ---- */
+html {
+    scroll-behavior: smooth;
+}
+
+a, button, input, textarea, select {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Apparition au scroll */
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 900ms ease, transform 900ms ease;
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Dégradé du hero (assombrit une photo de fond) */
+.hero-overlay {
+    background: linear-gradient(
+        180deg,
+        rgba(20, 17, 14, 0.35) 0%,
+        rgba(20, 17, 14, 0.55) 55%,
+        rgba(20, 17, 14, 0.72) 100%
+    );
+}
+
+/* Fond du hero quand aucune photo n'est renseignée
+   (dégradé terracotta chaud, fidèle à la maquette) */
+.hero-marcel {
+    background:
+        linear-gradient(180deg, rgba(20, 17, 14, 0.45) 0%, rgba(20, 17, 14, 0.72) 80%),
+        repeating-linear-gradient(100deg, #8a5a3c 0px, #7a4e33 4px, #8f6142 8px, #6b4128 16px);
+}
+
+/* Header une fois scrollé */
+.nav-scrolled {
+    background: rgba(241, 228, 208, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(34, 31, 28, 0.10);
+}
+
+/* Pointillés des lignes de menu/tarifs */
+.menu-dot {
+    flex: 1;
+    border-bottom: 1px dashed rgba(34, 31, 28, 0.20);
+    margin: 0 0.75rem 0.35rem;
+}
+
+/* Placeholder visuel chaud (photos à venir : galerie, histoire) */
+.ph-warm  { background: radial-gradient(circle at 30% 20%, #cf8863, #8a5a3c 75%); }
+.ph-salle { background: linear-gradient(135deg, #6b4128, #3f2716); }
+.ph-plat  { background: radial-gradient(circle at 60% 40%, #9fae7a, #5c6640); }
+.ph-mer   { background: linear-gradient(135deg, #2B4A4E, #17282b); }
+.ph-glace { background: linear-gradient(135deg, #c9834f, #9b5539); }
+
+/* Fond dégradé du bandeau d'appel à l'action */
+.cta-banner-bg {
+    background: linear-gradient(120deg, #9B5539, #BE6E4D);
+}
+
+/* Tampon rond du bandeau de réservation */
+.stamp-ring::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 9999px;
+}
+
+/* Zone d'édition de l'éditeur riche (admin) */
+.rte-area h2 { font-size: 1.25rem; font-weight: 700; margin: 0.8em 0 0.4em; }
+.rte-area h3 { font-size: 1.05rem; font-weight: 700; margin: 0.7em 0 0.3em; }
+.rte-area p { margin: 0.5em 0; }
+.rte-area a { color: #047857; text-decoration: underline; }
+.rte-area ul { list-style: disc; padding-left: 1.4em; margin: 0.5em 0; }
+.rte-area ol { list-style: decimal; padding-left: 1.4em; margin: 0.5em 0; }
+.rte-area:empty::before { content: "Rédigez votre contenu…"; color: #a8a29e; }
+
+/* Contenu HTML libre (bloc texte) */
+.prose-cms h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--color-forest); margin: 1.5em 0 0.5em; }
+.prose-cms h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--color-forest); margin: 1.2em 0 0.4em; }
+.prose-cms p { margin: 0.75em 0; line-height: 1.7; }
+.prose-cms a { text-decoration: underline; text-underline-offset: 2px; }
+.prose-cms ul, .prose-cms ol { margin: 0.75em 0; padding-left: 1.4em; }
+.prose-cms ul { list-style: disc; }
+.prose-cms ol { list-style: decimal; }
+.prose-cms li { margin: 0.3em 0; }

@@ -1,0 +1,44 @@
+<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %} class="scroll-mt-24 py-20 sm:py-28">
+    <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+
+        {# ---- Visuel ---- #}
+        <div class="reveal relative aspect-[4/5] overflow-hidden rounded-journal shadow-soft">
+            {% if data.image %}
+                <img src="{{ data.image }}" alt="{{ data.image_alt }}" class="h-full w-full object-cover" loading="lazy">
+            {% else %}
+                <div class="ph-warm h-full w-full"></div>
+            {% endif %}
+            {% if data.image_tag|default('') %}
+                <span class="absolute bottom-4 left-4 rounded-journal bg-ink/55 px-3 py-2 font-label text-[10px] uppercase tracking-[0.1em] text-white">{{ data.image_tag }}</span>
+            {% endif %}
+        </div>
+
+        {# ---- Texte ---- #}
+        <div class="reveal">
+            {% if data.kicker %}
+                <p class="font-label text-xs uppercase tracking-[0.28em] text-sage">{{ data.kicker }}</p>
+            {% endif %}
+            {% if data.title %}
+                <h2 class="mt-3 font-display text-3xl font-medium italic text-forest sm:text-4xl">{{ data.title }}</h2>
+            {% endif %}
+
+            <div class="mt-6 max-w-xl space-y-4 text-[15px] leading-relaxed text-ink/70">
+                {% for para in data.text|default('')|split_pairs %}
+                    <p>{{ para.left|raw }}{% if para.right %} {{ para.right|raw }}{% endif %}</p>
+                {% endfor %}
+            </div>
+
+            {% set stats = data.stats|default('')|split_pairs %}
+            {% if stats|length > 0 %}
+                <div class="mt-9 flex flex-wrap gap-10">
+                    {% for stat in stats %}
+                        <div>
+                            <b class="block font-display text-3xl font-medium italic text-argile">{{ stat.left }}</b>
+                            <span class="font-label text-[10px] uppercase tracking-[0.1em] text-ink/50">{{ stat.right }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>

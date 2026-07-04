@@ -1,0 +1,27 @@
+<section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %}
+         class="cta-banner-bg scroll-mt-24 px-4 py-24 text-center text-white sm:px-6">
+    <div class="reveal mx-auto max-w-xl">
+        {% if data.stamp_big or data.stamp_top or data.stamp_bottom %}
+            <div class="stamp-ring relative mx-auto mb-8 flex h-36 w-36 items-center justify-center rounded-full border-2 border-white/55">
+                <div class="px-3 text-center font-label text-[9.5px] uppercase leading-[1.7] tracking-[0.16em]">
+                    {{ data.stamp_top }}
+                    {% if data.stamp_big %}<span class="my-0.5 block font-display text-lg font-medium italic tracking-normal">{{ data.stamp_big }}</span>{% endif %}
+                    {{ data.stamp_bottom }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if data.title %}
+            <h2 class="font-display text-3xl font-medium italic sm:text-4xl">{{ data.title }}</h2>
+        {% endif %}
+        {% if data.text %}
+            <p class="mx-auto mt-4 max-w-md text-[15px] text-white/85">{{ data.text }}</p>
+        {% endif %}
+        {% if data.button_label %}
+            <a href="{{ data.button_link ?: '#' }}"
+               class="mt-8 inline-flex items-center justify-center rounded-journal bg-white px-8 py-3.5 font-label text-xs uppercase tracking-[0.14em] text-earth transition hover:-translate-y-0.5 hover:bg-sand">
+                {{ data.button_label }}
+            </a>
+        {% endif %}
+    </div>
+</section>
