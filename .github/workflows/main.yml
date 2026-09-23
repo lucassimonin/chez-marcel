@@ -21,10 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: PHP 8.3
+      # Même version que la production (Dockerfile : frankenphp:1-php8.4).
+      # En 8.3, doctrine/instantiator (^8.4) ne s'installe pas.
+      - name: PHP 8.4
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: gd, intl, pdo_sqlite, sqlite3
           coverage: none
 
