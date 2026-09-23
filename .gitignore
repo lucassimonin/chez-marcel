@@ -8,7 +8,9 @@
 /public/uploads/media/*
 !/public/uploads/media/.gitkeep
 /assets/vendor/
-/composer.lock
+# composer.lock est versionné : c'est une application, pas une bibliothèque.
+# Sans lui, la CI et le serveur résolvent les dépendances à neuf et
+# n'installent pas les versions réellement testées ici.
 /symfony.lock
 /var/tailwind/
 /phpunit.xml

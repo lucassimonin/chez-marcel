@@ -1,0 +1,100 @@
+name: CI / Deploy
+
+# À chaque push sur main : vérifications (lint + tests), puis déploiement SSH
+# sur le serveur. Les pull requests ne font que les vérifications.
+# Déclenchement manuel possible depuis l'onglet Actions (workflow_dispatch).
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    name: Lint + PHPUnit + Behat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: gd, intl, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer
+          key: composer-${{ hashFiles('composer.json', 'composer.lock') }}
+
+      - name: Dépendances
+        run: composer install --no-interaction --no-progress
+
+      - name: Assets (importmap)
+        run: php bin/console importmap:install
+
+      - name: Lint Twig / YAML / Container
+        run: |
+          php bin/console lint:twig templates
+          php bin/console lint:yaml config translations
+          php bin/console lint:container
+
+      - name: PHPUnit (unitaires + fonctionnels, SQLite)
+        run: vendor/bin/phpunit
+
+      - name: Behat (acceptance)
+        run: vendor/bin/behat --format=progress
+
+  deploy:
+    name: Deploy to server
+    needs: checks
+    runs-on: ubuntu-latest
+    # Jamais sur une pull request : uniquement push sur main (ou lancement manuel).
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || '22' }}
+          command_timeout: 30m
+          script: |
+            set -euo pipefail
+            cd "${{ secrets.DEPLOY_PATH }}"
+
+            echo "→ Mise à jour du code (origin/main)"
+            git fetch --all --prune
+            git reset --hard origin/main
+
+            echo "→ Réseau partagé du proxy (créé s'il manque)"
+            docker network create web 2>/dev/null || true
+
+            COMPOSE="docker compose --env-file .env.prod -f compose.proxy.yaml"
+
+            echo "→ Build & (re)démarrage du conteneur"
+            $COMPOSE up -d --build
+
+            echo "→ Compilation des assets (Tailwind minifié + AssetMapper)"
+            $COMPOSE exec -T app php bin/console tailwind:build --minify
+            $COMPOSE exec -T app php bin/console asset-map:compile
+
+            echo "→ Mise à jour du schéma de base de données"
+            $COMPOSE exec -T app php bin/console doctrine:schema:update --force --complete --no-interaction
+
+            echo "→ Vidage et réchauffage du cache"
+            $COMPOSE exec -T app php bin/console cache:clear
+            $COMPOSE exec -T app php bin/console cache:warmup
+
+            echo "→ Nettoyage des images inutilisées"
+            docker image prune -f
+
+            echo "✓ Déploiement terminé"
