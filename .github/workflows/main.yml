@@ -44,6 +44,12 @@ jobs:
       - name: Assets (importmap)
         run: php bin/console importmap:install
 
+      # Indispensable : les templates appellent asset('styles/app.css'), que
+      # le bundle Tailwind sert depuis var/tailwind/app.built.css. Sans cette
+      # compilation, tous les tests qui rendent une page échouent.
+      - name: Assets (Tailwind)
+        run: php bin/console tailwind:build
+
       - name: Lint Twig / YAML / Container
         run: |
           php bin/console lint:twig templates
