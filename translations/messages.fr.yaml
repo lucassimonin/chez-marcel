@@ -1,0 +1,20 @@
+# Libellés d'interface du front (ceux qui ne viennent pas du contenu éditable).
+# Le contenu des blocs, lui, se traduit dans l'admin page par page.
+contact:
+    hours: Horaires
+    name: Nom
+    email: E-mail
+    subject: Sujet
+    choose: Choisir
+    message: Message
+    message_placeholder: 'Date, nombre de convives, horaire…'
+    send: Envoyer
+    map_title: Carte
+    location: localisation
+
+cookies:
+    accept: Accepter
+    refuse: Refuser
+    manage: Gérer les cookies
+    learn_more: En savoir plus
+    banner_text: "Nous utilisons des cookies de mesure d'audience pour améliorer le site. Vous pouvez accepter ou refuser, votre choix est conservé 6 mois."

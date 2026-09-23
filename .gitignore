@@ -39,3 +39,10 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> outils locaux ###
+/composer.phar
+# Photos sources du client (originaux HEIC + versions préparées) : contenu de
+# travail, pas du code. Les médias publiés vivent dans la bibliothèque du CMS.
+/mitch photo/
+###< outils locaux ###

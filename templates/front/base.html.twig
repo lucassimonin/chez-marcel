@@ -103,7 +103,7 @@
     <p>
         © <span id="year"></span> {{ setting('footer_text', site_name) }}
         {% if setting('analytics_id') %}
-            · <button type="button" data-cookie-settings class="underline decoration-ink/20 hover:text-forest">Gérer les cookies</button>
+            · <button type="button" data-cookie-settings class="underline decoration-ink/20 hover:text-forest">{{ 'cookies.manage'|trans }}</button>
         {% endif %}
     </p>
     {% set footer_items = nav_items('footer') %}
@@ -127,17 +127,17 @@
          role="dialog" aria-live="polite" aria-label="Consentement aux cookies">
         <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <p class="text-sm leading-relaxed text-ink/75">
-                {{ setting('cookie_banner_text', "Nous utilisons des cookies de mesure d'audience pour améliorer le site. Vous pouvez accepter ou refuser, votre choix est conservé 6 mois.") }}
-                <a href="{{ setting('privacy_url', '/mentions-legales') }}" class="underline decoration-ink/30 hover:text-forest">En savoir plus</a>
+                {{ setting('cookie_banner_text', 'cookies.banner_text'|trans) }}
+                <a href="{{ setting('privacy_url', '/mentions-legales') }}" class="underline decoration-ink/30 hover:text-forest">{{ 'cookies.learn_more'|trans }}</a>
             </p>
             <div class="flex shrink-0 gap-3">
                 <button type="button" id="cookieRefuse"
                         class="rounded-journal border border-line px-5 py-2.5 text-sm font-semibold text-ink/70 transition hover:border-forest hover:text-forest">
-                    Refuser
+                    {{ 'cookies.refuse'|trans }}
                 </button>
                 <button type="button" id="cookieAccept"
                         class="rounded-journal bg-forest px-5 py-2.5 text-sm font-semibold text-sand transition hover:bg-earth">
-                    Accepter
+                    {{ 'cookies.accept'|trans }}
                 </button>
             </div>
         </div>

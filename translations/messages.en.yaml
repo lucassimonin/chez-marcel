@@ -1,0 +1,19 @@
+# Interface labels for the front office (English version).
+contact:
+    hours: Opening hours
+    name: Name
+    email: Email
+    subject: Subject
+    choose: Choose
+    message: Message
+    message_placeholder: 'Date, number of guests, time…'
+    send: Send
+    map_title: Map
+    location: location
+
+cookies:
+    accept: Accept
+    refuse: Decline
+    manage: Manage cookies
+    learn_more: Learn more
+    banner_text: "We use audience measurement cookies to improve the site. You can accept or decline; your choice is kept for 6 months."

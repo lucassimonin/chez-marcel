@@ -54,9 +54,9 @@ a, button, input, textarea, select {
 .hero-overlay {
     background: linear-gradient(
         180deg,
-        rgba(20, 17, 14, 0.35) 0%,
-        rgba(20, 17, 14, 0.55) 55%,
-        rgba(20, 17, 14, 0.72) 100%
+        rgba(20, 17, 14, 0.42) 0%,
+        rgba(20, 17, 14, 0.64) 55%,
+        rgba(20, 17, 14, 0.76) 100%
     );
 }
 

@@ -6,6 +6,7 @@ use App\Entity\Block;
 use App\Entity\ContactMessage;
 use App\Service\SettingsProvider;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ContactController extends AbstractController
 {
     #[Route('/_contact', name: 'front_contact', methods: ['POST'])]
-    public function submit(Request $request, MailerInterface $mailer, SettingsProvider $settings, EntityManagerInterface $em): Response
+    public function submit(Request $request, MailerInterface $mailer, SettingsProvider $settings, EntityManagerInterface $em, LoggerInterface $logger): Response
     {
         $redirect = new RedirectResponse(($request->headers->get('referer') ?: '/').'#contact');
 
@@ -71,8 +72,16 @@ class ContactController extends AbstractController
 
         try {
             $mailer->send($mail);
-        } catch (\Throwable) {
-            // DSN null en dev : on considère la demande enregistrée
+        } catch (\Throwable $e) {
+            // La demande reste enregistrée en base, mais l'échec ne doit pas passer
+            // inaperçu : sans cette trace, des réservations peuvent être perdues
+            // sans que personne ne s'en aperçoive (DSN absent, SMTP injoignable…).
+            $logger->error('Échec de l\'envoi du message de contact vers {recipient} : {error}', [
+                'recipient' => $recipient,
+                'error' => $e->getMessage(),
+                'message_id' => $contactMessage->getId(),
+                'exception' => $e,
+            ]);
         }
 
         $this->addFlash('contact_success', 'Merci — votre demande a bien été envoyée.');
