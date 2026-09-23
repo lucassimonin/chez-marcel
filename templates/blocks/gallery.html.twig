@@ -11,40 +11,39 @@
 
         {% set placeholders = ['ph-warm', 'ph-salle', 'ph-plat', 'ph-mer', 'ph-glace'] %}
         {% set photos = data.images|default('')|split_pairs %}
-        {# La mosaïque compte 5 tuiles (1 grande + 4). Au-delà, les photos
-           supplémentaires sont réparties entre les tuiles et défilent. #}
-        {% set slots = photos|length > 5 ? 5 : photos|length %}
+
+        {# Une tuile par légende : deux lignes qui portent la même légende
+           partagent la même tuile et leurs photos y défilent en fondu. #}
+        {% set tuiles = [] %}
+        {% for photo in photos %}
+            {% set precedente = tuiles|length > 0 ? tuiles[tuiles|length - 1] : null %}
+            {% if precedente and precedente[0].right == photo.right %}
+                {% set tuiles = tuiles|slice(0, tuiles|length - 1)|merge([precedente|merge([photo])]) %}
+            {% else %}
+                {% set tuiles = tuiles|merge([[photo]]) %}
+            {% endif %}
+        {% endfor %}
 
         <div class="reveal grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[170px] sm:grid-cols-4">
-            {% for slot in 0..(slots - 1) %}
-                {% if slots > 0 %}
-                    {# Photos de cette tuile : une sur `slots`, pour répartir les doublons. #}
-                    {% set groupe = [] %}
-                    {% for index, photo in photos %}
-                        {% if index % slots == slot %}
-                            {% set groupe = groupe|merge([photo]) %}
+            {% for tuile in tuiles %}
+                <figure class="group relative overflow-hidden rounded-journal {{ loop.first ? 'col-span-2 row-span-2' }}"
+                        {% if tuile|length > 1 %}data-photo-rotate{% endif %}>
+                    {% for photo in tuile %}
+                        {% if photo.left %}
+                            <img src="{{ photo.left }}" alt="{{ photo.right }}"
+                                 data-caption="{{ photo.right }}"
+                                 class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 group-hover:scale-105 {{ loop.first ? 'opacity-100' : 'opacity-0' }}"
+                                 loading="lazy">
+                        {% else %}
+                            <div class="{{ placeholders[loop.parent.loop.index0 % placeholders|length] }} absolute inset-0 h-full w-full"></div>
                         {% endif %}
                     {% endfor %}
 
-                    <figure class="group relative overflow-hidden rounded-journal {{ slot == 0 ? 'col-span-2 row-span-2' }}"
-                            {% if groupe|length > 1 %}data-photo-rotate{% endif %}>
-                        {% for photo in groupe %}
-                            {% if photo.left %}
-                                <img src="{{ photo.left }}" alt="{{ photo.right }}"
-                                     data-caption="{{ photo.right }}"
-                                     class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 group-hover:scale-105 {{ loop.first ? 'opacity-100' : 'opacity-0' }}"
-                                     loading="lazy">
-                            {% else %}
-                                <div class="{{ placeholders[slot % placeholders|length] }} absolute inset-0 h-full w-full"></div>
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if groupe[0].right|default('') %}
-                            <figcaption data-gallery-caption
-                                        class="absolute bottom-3 left-3 font-label text-[10px] uppercase tracking-[0.08em] text-white drop-shadow transition-opacity duration-700">{{ groupe[0].right }}</figcaption>
-                        {% endif %}
-                    </figure>
-                {% endif %}
+                    {% if tuile[0].right|default('') %}
+                        <figcaption data-gallery-caption
+                                    class="absolute bottom-3 left-3 font-label text-[10px] uppercase tracking-[0.08em] text-white drop-shadow transition-opacity duration-700">{{ tuile[0].right }}</figcaption>
+                    {% endif %}
+                </figure>
             {% endfor %}
         </div>
     </div>
