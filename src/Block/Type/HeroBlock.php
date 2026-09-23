@@ -30,6 +30,7 @@ class HeroBlock extends AbstractBlockType
         $builder
             ->add('kicker', TextType::class, ['label' => 'Surtitre', 'required' => false, 'help' => 'Petite ligne au-dessus du titre (ex: Marché du Lez · Montpellier)'])
             ->add('title', TextType::class, ['label' => 'Titre', 'required' => false])
+            ->add('logo', MediaPickerType::class, ['label' => 'Logo (remplace le titre)', 'required' => false, 'help' => 'Si renseigné, le logo s\'affiche à la place du titre texte. Il est automatiquement passé en blanc sur la photo de fond.'])
             ->add('subtitle', TextType::class, ['label' => 'Sous-titre', 'required' => false, 'help' => 'Ligne en majuscules sous le titre'])
             ->add('tagline', TextType::class, ['label' => 'Accroche (italique)', 'required' => false])
             ->add('text', TextareaType::class, ['label' => 'Texte', 'required' => false, 'attr' => ['rows' => 3]])
@@ -49,6 +50,7 @@ class HeroBlock extends AbstractBlockType
         return [
             'kicker' => 'Surtitre',
             'title' => 'Titre principal',
+            'logo' => '',
             'subtitle' => '',
             'tagline' => '',
             'text' => '',

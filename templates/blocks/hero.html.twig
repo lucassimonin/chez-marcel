@@ -18,7 +18,15 @@
             {% if data.kicker %}
                 <p class="font-label text-xs uppercase tracking-[0.28em] text-sage">{{ data.kicker }}</p>
             {% endif %}
-            {% if data.title %}
+            {% if data.logo|default('') %}
+                {# Le logo remplace le titre texte. Il reste dans le <h1> : le
+                   titre de la page ne doit pas disparaître pour autant, il est
+                   porté par l'attribut alt. #}
+                <h1 class="mt-4">
+                    <img src="{{ data.logo }}" alt="{{ data.title|default('') }}"
+                         class="mx-auto h-24 w-auto max-w-[320px] brightness-0 invert sm:h-32 sm:max-w-md" loading="eager">
+                </h1>
+            {% elseif data.title %}
                 <h1 class="mt-4 font-display text-5xl font-medium italic leading-none text-white sm:text-7xl">{{ data.title }}</h1>
             {% endif %}
             {% if data.subtitle %}
