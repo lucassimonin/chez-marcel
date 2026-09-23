@@ -15,16 +15,13 @@
 
     <div class="relative mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center px-4 py-28 text-center sm:px-6">
         <div class="reveal">
-            {% if data.kicker %}
-                <p class="font-label text-xs uppercase tracking-[0.28em] text-sage">{{ data.kicker }}</p>
-            {% endif %}
             {% if data.logo|default('') %}
                 {# Le logo remplace le titre texte. Il reste dans le <h1> : le
                    titre de la page ne doit pas disparaître pour autant, il est
                    porté par l'attribut alt. #}
                 <h1 class="mt-4">
                     <img src="{{ data.logo }}" alt="{{ data.title|default('') }}"
-                         class="mx-auto h-24 w-auto max-w-[320px] brightness-0 invert sm:h-32 sm:max-w-md" loading="eager">
+                         class="mx-auto h-36 w-auto max-w-[340px] brightness-0 invert sm:h-52 sm:max-w-xl" loading="eager">
                 </h1>
             {% elseif data.title %}
                 <h1 class="mt-4 font-display text-5xl font-medium italic leading-none text-white sm:text-7xl">{{ data.title }}</h1>
@@ -37,6 +34,10 @@
             {% endif %}
             {% if data.text %}
                 <p class="mx-auto mt-6 max-w-md text-base leading-relaxed text-sand/85">{{ data.text }}</p>
+            {% endif %}
+            {# Le surtitre (ex : Palavas-les-Flots) est placé sous l'accroche. #}
+            {% if data.kicker %}
+                <p class="mt-5 font-label text-xs uppercase tracking-[0.28em] text-sage">{{ data.kicker }}</p>
             {% endif %}
 
             {% if data.primary_label or data.secondary_label %}
