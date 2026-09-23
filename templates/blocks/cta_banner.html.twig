@@ -1,7 +1,12 @@
 <section {% if data.anchor|default('') %}id="{{ data.anchor }}"{% endif %}
          class="cta-banner-bg scroll-mt-24 px-4 py-24 text-center text-white sm:px-6">
     <div class="reveal mx-auto max-w-xl">
-        {% if data.stamp_big or data.stamp_top or data.stamp_bottom %}
+        {% if data.logo|default('') %}
+            {# Le logo est sombre : sur ce fond coloré, on le passe en blanc
+               (même principe que le logo du header sur le hero). #}
+            <img src="{{ data.logo }}" alt="{{ data.logo_alt|default('') }}"
+                 class="mx-auto mb-8 h-24 w-auto max-w-[260px] brightness-0 invert sm:h-28" loading="lazy">
+        {% elseif data.stamp_big or data.stamp_top or data.stamp_bottom %}
             <div class="stamp-ring relative mx-auto mb-8 flex h-36 w-36 items-center justify-center rounded-full border-2 border-white/55">
                 <div class="px-3 text-center font-label text-[9.5px] uppercase leading-[1.7] tracking-[0.16em]">
                     {{ data.stamp_top }}
