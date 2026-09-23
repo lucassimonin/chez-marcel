@@ -90,7 +90,53 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         reveals.forEach((el) => io.observe(el));
     }
+
+    initPhotoRotation();
 });
+
+/* =========================================================
+   Défilement de photos (hero et galerie)
+   Un conteneur marqué `data-photo-rotate` fait alterner en fondu les
+   images qu'il contient. La valeur de l'attribut donne la durée
+   d'affichage en millisecondes (5 s par défaut).
+   Les conteneurs sont décalés entre eux pour éviter un effet de bloc.
+   ========================================================= */
+function initPhotoRotation() {
+    const zones = [...document.querySelectorAll('[data-photo-rotate]')];
+    if (zones.length === 0) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const DECALAGE = 1200; // écart entre deux zones voisines
+
+    zones.forEach((zone, rang) => {
+        const photos = [...zone.querySelectorAll('img')];
+        if (photos.length < 2) return;
+
+        const delai = parseInt(zone.dataset.photoRotate, 10) || 5000;
+        const legende = zone.querySelector('[data-gallery-caption]');
+        let courante = 0;
+
+        const suivante = () => {
+            // Inutile d'animer quand l'onglet est en arrière-plan.
+            if (document.hidden) return;
+
+            photos[courante].classList.replace('opacity-100', 'opacity-0');
+            courante = (courante + 1) % photos.length;
+            photos[courante].classList.replace('opacity-0', 'opacity-100');
+
+            if (legende) {
+                const texte = photos[courante].dataset.caption || '';
+                legende.classList.add('opacity-0');
+                setTimeout(() => {
+                    legende.textContent = texte;
+                    legende.classList.remove('opacity-0');
+                }, 350);
+            }
+        };
+
+        setTimeout(() => setInterval(suivante, delai), rang * DECALAGE);
+    });
+}
 
 /* =========================================================
    Consentement cookies (RGPD / CNIL)

@@ -35,6 +35,8 @@ class HeroBlock extends AbstractBlockType
             ->add('text', TextareaType::class, ['label' => 'Texte', 'required' => false, 'attr' => ['rows' => 3]])
             ->add('image', MediaPickerType::class, ['label' => 'Image de fond', 'required' => false, 'help' => 'Choisissez dans la bibliothèque ou collez une URL'])
             ->add('image_alt', TextType::class, ['label' => 'Texte alternatif de l\'image', 'required' => false])
+            ->add('image_2', MediaPickerType::class, ['label' => 'Deuxième image de fond (facultatif)', 'required' => false, 'help' => 'Si renseignée, les deux photos alternent en fondu'])
+            ->add('image_2_alt', TextType::class, ['label' => 'Texte alternatif de la deuxième image', 'required' => false])
             ->add('primary_label', TextType::class, ['label' => 'Bouton principal — libellé', 'required' => false])
             ->add('primary_link', TextType::class, ['label' => 'Bouton principal — lien ou ancre', 'required' => false, 'help' => 'Ex: #menu ou /contact'])
             ->add('secondary_label', TextType::class, ['label' => 'Bouton secondaire — libellé', 'required' => false])
@@ -52,6 +54,8 @@ class HeroBlock extends AbstractBlockType
             'text' => '',
             'image' => '',
             'image_alt' => '',
+            'image_2' => '',
+            'image_2_alt' => '',
             'primary_label' => '',
             'primary_link' => '',
             'secondary_label' => '',
